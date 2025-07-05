@@ -1,0 +1,1140 @@
+{
+    "swagger": "2.0",
+    "basePath": "/",
+    "paths": {
+        "/api/customers": {
+            "get": {
+                "responses": {
+                    "400": {
+                        "description": "Invalid query parameters"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Customer"
+                            }
+                        }
+                    }
+                },
+                "summary": "List all customers",
+                "operationId": "list_customers",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "409": {
+                        "description": "Customer with this phone number already exists"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "201": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                },
+                "summary": "Create a new customer",
+                "operationId": "create_customer",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            }
+        },
+        "/api/customers/{customer_id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The customer identifier",
+                    "name": "customer_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "404": {
+                        "description": "Customer not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                },
+                "summary": "Get a customer by ID",
+                "operationId": "get_customer",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "404": {
+                        "description": "Customer not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Cannot delete customer with associated orders"
+                    },
+                    "204": {
+                        "description": "Customer deleted successfully"
+                    }
+                },
+                "summary": "Delete a customer",
+                "operationId": "delete_customer",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            },
+            "put": {
+                "responses": {
+                    "409": {
+                        "description": "Customer with this phone number already exists"
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                },
+                "summary": "Update a customer",
+                "operationId": "update_customer",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            }
+        },
+        "/api/login": {
+            "post": {
+                "responses": {
+                    "429": {
+                        "description": "Too many login attempts"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "200": {
+                        "description": "Login successful",
+                        "schema": {
+                            "$ref": "#/definitions/Token"
+                        }
+                    }
+                },
+                "summary": "Login with user credentials",
+                "operationId": "login_user",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Logout successful"
+                    }
+                },
+                "summary": "Logout user and revoke token",
+                "operationId": "logout_user",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/api/orders": {
+            "get": {
+                "responses": {
+                    "400": {
+                        "description": "Invalid query parameters"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Order"
+                            }
+                        }
+                    }
+                },
+                "summary": "List all orders with optional filters",
+                "operationId": "list_orders",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "409": {
+                        "description": "Duplicate order detected"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "201": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    }
+                },
+                "summary": "Create a new order",
+                "operationId": "create_order",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ]
+            }
+        },
+        "/api/orders/{order_id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The order identifier",
+                    "name": "order_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "404": {
+                        "description": "Order not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    }
+                },
+                "summary": "Get an order by ID",
+                "operationId": "get_order",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "404": {
+                        "description": "Order not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Cannot delete paid or delivered orders"
+                    },
+                    "204": {
+                        "description": "Order deleted successfully"
+                    }
+                },
+                "summary": "Delete an order",
+                "operationId": "delete_order",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ]
+            }
+        },
+        "/api/orders/{order_id}/delivery_status": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The order identifier",
+                    "name": "order_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "put": {
+                "responses": {
+                    "404": {
+                        "description": "Order not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "200": {
+                        "description": "Order delivery status updated successfully"
+                    }
+                },
+                "summary": "Update order delivery status",
+                "operationId": "update_order_delivery_status",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/OrderDeliveryStatus"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ]
+            }
+        },
+        "/api/orders/{order_id}/order_type": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The order identifier",
+                    "name": "order_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "put": {
+                "responses": {
+                    "404": {
+                        "description": "Order not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "200": {
+                        "description": "Order type updated successfully"
+                    }
+                },
+                "summary": "Update order type",
+                "operationId": "update_order_type",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/OrderType"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ]
+            }
+        },
+        "/api/orders/{order_id}/payment_status": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The order identifier",
+                    "name": "order_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "put": {
+                "responses": {
+                    "404": {
+                        "description": "Order not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "200": {
+                        "description": "Order payment status updated successfully"
+                    }
+                },
+                "summary": "Update order payment status",
+                "operationId": "update_order_payment_status",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/OrderPaymentStatus"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "orders"
+                ]
+            }
+        },
+        "/api/products": {
+            "get": {
+                "responses": {
+                    "400": {
+                        "description": "Invalid query parameters"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Product"
+                            }
+                        }
+                    }
+                },
+                "summary": "List all products",
+                "operationId": "list_products",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "429": {
+                        "description": "Too many requests"
+                    },
+                    "409": {
+                        "description": "Product with this name already exists"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "201": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                },
+                "summary": "Create a new product",
+                "operationId": "create_product",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            }
+        },
+        "/api/products/{product_id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The product identifier",
+                    "name": "product_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "404": {
+                        "description": "Product not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                },
+                "summary": "Get a product by ID",
+                "operationId": "get_product",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "404": {
+                        "description": "Product not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Cannot delete product that is associated with orders"
+                    },
+                    "204": {
+                        "description": "Product deleted successfully"
+                    }
+                },
+                "summary": "Delete a product",
+                "operationId": "delete_product",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            },
+            "put": {
+                "responses": {
+                    "409": {
+                        "description": "Product with this name already exists"
+                    },
+                    "404": {
+                        "description": "Product not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                },
+                "summary": "Update a product",
+                "operationId": "update_product",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            }
+        },
+        "/api/protected": {
+            "get": {
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Access granted"
+                    }
+                },
+                "summary": "Test protected endpoint",
+                "operationId": "protected_route",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/api/refresh": {
+            "post": {
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "Token refreshed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/Token"
+                        }
+                    }
+                },
+                "summary": "Refresh access token",
+                "operationId": "refresh_token",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "responses": {
+                    "409": {
+                        "description": "Username already exists"
+                    },
+                    "400": {
+                        "description": "Invalid input data or username exists"
+                    },
+                    "201": {
+                        "description": "User registered successfully"
+                    }
+                },
+                "summary": "Register a new user",
+                "operationId": "register_user",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "WhatsApp Chat API",
+        "version": "1.0",
+        "description": "API for WhatsApp chat and business operations"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "auth",
+            "description": "Authentication operations"
+        },
+        {
+            "name": "customers",
+            "description": "Customer operations"
+        },
+        {
+            "name": "orders",
+            "description": "Order operations"
+        },
+        {
+            "name": "products",
+            "description": "Product operations"
+        }
+    ],
+    "definitions": {
+        "User": {
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Username (3-30 chars, alphanumeric and underscores only)",
+                    "minLength": 3,
+                    "maxLength": 30
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password (min 8 chars, must include uppercase, lowercase, and digit)",
+                    "minLength": 8
+                }
+            },
+            "type": "object"
+        },
+        "Token": {
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "description": "JWT access token"
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "description": "JWT refresh token"
+                },
+                "token_type": {
+                    "type": "string",
+                    "description": "Token type",
+                    "example": "Bearer"
+                },
+                "expires_in": {
+                    "type": "integer",
+                    "description": "Token expiration time in seconds",
+                    "example": 900
+                }
+            },
+            "type": "object"
+        },
+        "Customer": {
+            "required": [
+                "phone_number"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Customer ID",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Customer name",
+                    "maxLength": 80
+                },
+                "phone_number": {
+                    "type": "string",
+                    "description": "Customer phone number (6-10 digits, country code optional)",
+                    "maxLength": 20
+                },
+                "address": {
+                    "type": "string",
+                    "description": "Customer address",
+                    "maxLength": 255
+                },
+                "notes": {
+                    "type": "string",
+                    "description": "Additional notes about the customer"
+                }
+            },
+            "type": "object"
+        },
+        "Order": {
+            "required": [
+                "customer_id",
+                "items",
+                "order_type"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Order ID",
+                    "readOnly": true
+                },
+                "customer_id": {
+                    "type": "integer",
+                    "description": "ID of the customer"
+                },
+                "order_type": {
+                    "type": "string",
+                    "description": "Type of order (pickup or delivery)",
+                    "example": "pickup",
+                    "enum": [
+                        "pickup",
+                        "delivery"
+                    ]
+                },
+                "payment_status": {
+                    "type": "string",
+                    "description": "Payment status",
+                    "example": "notPaid",
+                    "enum": [
+                        "notPaid",
+                        "paid"
+                    ]
+                },
+                "delivery_status": {
+                    "type": "string",
+                    "description": "Delivery status",
+                    "example": "notDelivered",
+                    "enum": [
+                        "notDelivered",
+                        "delivered"
+                    ]
+                },
+                "datetime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Order datetime"
+                },
+                "items": {
+                    "type": "array",
+                    "description": "List of items in the order",
+                    "items": {
+                        "$ref": "#/definitions/OrderItem"
+                    }
+                },
+                "total_amount": {
+                    "type": "number",
+                    "description": "Total order amount"
+                }
+            },
+            "type": "object"
+        },
+        "OrderItem": {
+            "required": [
+                "product_id",
+                "quantity"
+            ],
+            "properties": {
+                "product_id": {
+                    "type": "integer",
+                    "description": "ID of the product"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "description": "Quantity of the product",
+                    "minimum": 1
+                }
+            },
+            "type": "object"
+        },
+        "OrderPaymentStatus": {
+            "properties": {
+                "payment_status": {
+                    "type": "string",
+                    "example": "notPaid",
+                    "enum": [
+                        "notPaid",
+                        "paid"
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "OrderDeliveryStatus": {
+            "properties": {
+                "delivery_status": {
+                    "type": "string",
+                    "example": "notDelivered",
+                    "enum": [
+                        "notDelivered",
+                        "delivered"
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "OrderType": {
+            "properties": {
+                "order_type": {
+                    "type": "string",
+                    "example": "pickup",
+                    "enum": [
+                        "pickup",
+                        "delivery"
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "Product": {
+            "required": [
+                "name",
+                "price"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Product identifier",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Product name",
+                    "maxLength": 80
+                },
+                "price": {
+                    "type": "number",
+                    "description": "Product price",
+                    "minimum": 0
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Product description",
+                    "maxLength": 255
+                },
+                "picture_url": {
+                    "type": "string",
+                    "description": "Product picture URL",
+                    "maxLength": 255
+                },
+                "is_active": {
+                    "type": "boolean",
+                    "description": "Product active status"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "responses": {
+        "ParseError": {
+            "description": "When a mask can't be parsed"
+        },
+        "MaskError": {
+            "description": "When any error occurs on mask"
+        }
+    }
+}
